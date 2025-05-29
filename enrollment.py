@@ -434,7 +434,7 @@ def manage_enrollments():
     while True:
         util.clear_screen()
         util.set_cursor_coordinate(10,5)
-        print("Manage Enrollments".upper)
+        print("Manage Enrollments".upper())
         util.set_cursor_coordinate(10,6)
         print("-"*25)
         util.set_cursor_coordinate(10,7)
@@ -442,9 +442,9 @@ def manage_enrollments():
         util.set_cursor_coordinate(10,8)
         print("[2] Drop Course")
         util.set_cursor_coordinate(10,9)
-        print("[3] View Enrollments")
+        print("[3] Masterlist")
         util.set_cursor_coordinate(10,10)
-        print("[4] Filter by Course")
+        print("[4] Filter")
         util.set_cursor_coordinate(10,11)
         print("[5] Back to Main Menu")
         util.set_cursor_coordinate(10,12)
@@ -458,13 +458,13 @@ def manage_enrollments():
                     util.clear_screen()
                     display.all_students_table_display(students)
                     print()
-                    print("\nEnroll Student in Course [Leave Student ID blank to cancel]")
-                    print("=" * 60)
+                    print("\nEnroll Student in Course [Leave fields blank to exit]")
+                    print("-" * 60)
+                    print()
                     student_id = input("Student ID: ")
                     if not student_id.strip():
-                        print("Enrollment cancelled.")
-                        input("\nPress Enter to continue...")
                         break
+
                     if student_id not in students:
                         print("Student not found.")
                         input("\nPress Enter to continue...")
@@ -488,12 +488,10 @@ def manage_enrollments():
 
                         display.course_table_display(available_courses, "Available Course(s)")
                         print()
-                        print("Select a course to enroll in [Leave Course ID blank to cancel]")
-                        print("=" * 85)
+                        print("Select a course to enroll in [Leave field blank to exit]")
+                        print("-" * 85)
                         course_id = input("Course ID: ")
                         if not course_id.strip():
-                            print("Enrollment cancelled.")
-                            input("\nPress Enter to continue...")
                             break
 
                         if course_id not in courses:
@@ -510,42 +508,51 @@ def manage_enrollments():
                             enrolled[student_id] = Enrollment(student_id, [course_id])
                         else:
                             enrolled[student_id].course_ids.append(course_id)
-                        
-                        print(f"Student {students[student_id].fname} {students[student_id].lname} enrolled in {courses[course_id].course_name} successfully.")
+                    
+                        print(f"\nStudent {students[student_id].fname} {students[student_id].lname} is enrolled in {courses[course_id].course_name} successfully.")
                         db.save_enrolled_csv(enrolled)
                         input("\nPress Enter to continue...")
                         
             elif choice == '2':
-                util.clear_screen()
-                display.enrolled_table_display(enrolled, Enrollment, students)
-                print("\nDrop Course")
-                print("=" * 85)
-                student_id = input("Enter Student ID to modity enrollment: ")
-                util.clear_screen()
-                if student_id in enrolled:
-                    while True:
-                        util.clear_screen()
-                        display.specific_enrolled_table_display(students, student_id, enrolled[student_id])
-                        print()
-                        course_id = input("Enter Course ID to remove from enrollment (leave blank to cancel): ")
-                        if not course_id.strip():
-                            print("Update cancelled.")
-                            input("\nPress Enter to continue...")
-                            break
-                        if course_id in enrolled[student_id].course_ids:
-                            enrolled[student_id].course_ids.remove(course_id)
-                            print(f"Course {course_id} removed from student {student_id}'s enrollment.")
-                            if not enrolled[student_id].course_ids:
-                                del enrolled[student_id]
-                                print(f"Student {student_id} has no more enrollments and has been removed from the system.")
-                            input("\nPress Enter to continue...")
-                            break
-                        else:
-                            print(f"Course {course_id} not found in student {student_id}'s enrollment.")
-                            input("\nPress Enter to continue...")
-                else:
-                    print("No enrollments found for this student.")
-                    input("\nPress Enter to continue...")
+                while True:
+                    util.clear_screen()
+                    display.enrolled_table_display(enrolled, Enrollment, students)
+                    print("\nDrop Course".upper())
+                    print("-" * 85)
+                    print()
+                    student_id = input("Select Student ID: ")
+
+                    if not student_id.strip():
+                        break
+
+                    if student_id in enrolled:
+                        while True:
+                            util.clear_screen()
+                            display.specific_enrolled_table_display(students, student_id, enrolled[student_id])
+                            print()
+                            course_id = input("Select Course ID to drop [Leave field blank to cancel]: ")
+
+                            if not course_id.strip():
+                                break
+
+                            if course_id in enrolled[student_id].course_ids:
+                                enrolled[student_id].course_ids.remove(course_id)
+                                print(f"Course {course_id} removed from student {student_id}'s enrollment.")
+
+                                if not enrolled[student_id].course_ids:
+                                    del enrolled[student_id]
+                                    print(f"Student {student_id} dropped all course and will be removed from the enrolled student list.")
+                                    
+
+                                db.save_enrolled_csv(enrolled)
+                                input("\nPress Enter to continue...")
+                        
+                            else:
+                                print(f"Course {course_id} not found in student {student_id}'s enrollment.")
+                                input("\nPress Enter to continue...")
+                    else:
+                        print("No enrollments found for this student.")
+                        input("\nPress Enter to continue...")
 
             elif choice == '3':
                 util.clear_screen()
@@ -555,37 +562,87 @@ def manage_enrollments():
             elif choice == '4':
                 while True:
                     util.clear_screen()
-                    display.course_table_display(courses)
-                    print()
-                    print("Filter Enrollments by Course")
-                    print("=" * 85)
-                    course_id = input("Enter Course ID to filter enrollments: ")
-                    if not course_id.strip():
-                        input("\nPress Enter to continue...")
+
+                    util.set_cursor_coordinate(10,5)
+                    print("Filter by [Leave field blank to exit]".upper())
+                    util.set_cursor_coordinate(10,6)
+                    print("-"*25)
+                    util.set_cursor_coordinate(10,7)
+                    print("[1] Course")
+                    util.set_cursor_coordinate(10,8)
+                    print("[2] Student")
+                    util.set_cursor_coordinate(10,9)
+                    print("-"*25)
+                    util.set_cursor_coordinate(10,10)
+                    choice = input("Enter your choice: ")
+
+                    if not choice.strip():
                         break
-                        
-                    if course_id in courses:
-                        util.clear_screen()
-                        found = False
-                        print(f"\nStudents enrolled in {course_id}")
-                        print()
-                        print(f"{'ID':<10} {'Name':<25}")
-                        print("=" * 35)
-                        for student_id, enrollment in enrolled.items():
-                            if course_id in enrollment.course_ids:
-                                student = students[student_id]
-                                print(f"{student.student_id:<10} {student.fname + " "+ student.lname:<25}")
-                                found = True
-                        if not found:
-                            print("No students enrolled in this course.\n")
-                    else:
-                        print("Course not found.")
-                    
-                    input("\nPress Enter to continue...")
+
+                    if util.validate_choice(choice, 2):
+                        if choice == '1':
+                            while True:
+                                util.clear_screen()
+                                display.course_table_display(courses)
+                                print()
+                                print("View enrolled student by course".upper())
+                                print("-" * 85)
+                                course_id = input("Course ID: ")
+                                if not course_id.strip():
+                                    break
+                                    
+                                if course_id in courses:
+                                    util.clear_screen()
+                                    found = False
+                                    print(f"\nStudents enrolled in {course_id}")
+                                    print()
+                                    print(f"{'ID':<10} {'Name':<25}")
+                                    print("=" * 35)
+                                    for student_id, enrollment in enrolled.items():
+                                        if course_id in enrollment.course_ids:
+                                            student = students[student_id]
+                                            print(f"{student.student_id:<10} {student.fname + " "+ student.lname:<25}")
+                                            found = True
+                                    if not found:
+                                        print("No students enrolled in this course.\n")
+                                    
+                                    input("\nPress Enter to continue...")
+                                else:
+                                    print("Course not found.")
+                                    input("\nPress Enter to continue...")
+                                
+                        elif choice == '2':
+                            while True:
+                                util.clear_screen()
+                                display.all_students_table_display(students)
+                                print("\nView enrolled courses by student".upper())
+                                print("-" * 85)
+                                student_id = input("Student ID: ")
+                                if not student_id.strip():
+                                    break
+
+                                if student_id in students:
+                                    util.clear_screen()
+                                    found = False
+                                    print(f"\nCourses enrolled by {students[student_id].name()}")
+                                    print()
+                                    print(f"{'Course ID':<15} {'Course Name':<25} {'Instructor':<20}")
+                                    print("=" * 60)
+                                    if student_id in enrolled:
+                                        for course_id in enrolled[student_id].course_ids:
+                                            course = courses[course_id]
+                                            print(f"{course.course_id:<15} {course.course_name:<25} {course.instructor:<20}")
+                                            found = True
+                                    if not found:
+                                        print("No courses enrolled by this student.\n")
+                                        
+                                    input("\nPress Enter to continue...")
+                                else:
+                                    print("Student not found.")
+                                    input("\nPress Enter to continue...")
+
             elif choice == '5':
                 return
-
-
 
 def manage_quizzes():
     while True:
@@ -616,24 +673,33 @@ def manage_quizzes():
 
                     display.course_table_display(courses)
                     print()
-                    print("Add New Quiz [Leave Quiz ID blank to cancel]")
-                    print("=" * 85)
+                    print("Add New Quiz [Leave fields blank to cancel]")
+                    print("-" * 85)
+                    print()
 
-                    
+                    print("Course ID  :")
+                    print("Quiz Title :")
 
-                    quiz_title = input("Quiz Title: ")
+                    util.set_cursor_coordinate(14, 20)
+                    course_id = input()
 
-                    if not quiz_title.strip():
-                        print("Quiz creation cancelled.")
-                        input("\nPress Enter to continue...")
-                        break                  
-
-                    course_id = input("Course ID: ")
+                    if not course_id.strip():
+                        break  
 
                     if course_id not in courses:
+                        util.set_cursor_coordinate(0, 23)
                         print("Course not found.")
-                        input("\nPress Enter to continue...")
+                        util.set_cursor_coordinate(0, 24)
+                        input("Press Enter to continue...")
                         continue
+                    
+                    util.set_cursor_coordinate(14, 21)
+                    quiz_title = input()
+                    
+                    if not quiz_title.strip():
+                        break                  
+
+                    
                     
                     temp_quiz = []
                     while True:
@@ -705,132 +771,162 @@ def manage_quizzes():
                     print("No quizzes available.")
                 input("\nPress Enter to continue...")
             elif choice == '3':
-                util.clear_screen()
-                display.course_table_display(courses)
-                print("\nFilter Quizzes by Course")
-                print("=" * 85)
-                course_id = input("Enter Course ID to filter quizzes: ")
-                threshold = input("Enter score threshold [Leave blank if not needed]: ")
-                if not threshold.strip():
-                    threshold = 0
-                else:
-                    threshold = int(threshold)
+                while True:
+                    util.clear_screen()
+                    display.course_table_display(courses)
+                    print("\nFilter Quizzes by Course [Leave fields blank to cancel]")
+                    print("-" * 85)
 
-                if course_id in courses:
-                    while True:
-                        util.clear_screen()
-                        found = False
-                        print(f"\nQuizzes for Course {course_id} - {courses[course_id].course_name}")
+                    print()
+                    
+                    course_id = input("Course ID : ")
+                    if not course_id.strip():
+                        break  
 
-                        print(f"{'Quiz Title:':<15} {'ID:':<10} {'Name:':<25} {'Score'}")
-                        print("=" * 85)
-                        available_quiz_title = []
-                        for quiz_id, quiz in quizzes.items():
-                            if quiz.course_id == course_id:
-                                print(f"{quiz.quiz_title:<15} {quiz.student_id:<10} {students[quiz.student_id].name():<25} {quiz.score}")
-                                available_quiz_title.append(quiz.quiz_title)
+                    if course_id not in courses:
+                        print("Course not found.")
+                        input("Press Enter to continue...")
+                        continue
 
-                        print()
-                        selected_quiz_title = input("Select quiz title: [Leave blank to exit]: ")
+                    if course_id in courses:
+                        while True:
+                            util.clear_screen()
+                            found = False
+                            print(f"\nQuizzes for Course {course_id} - {courses[course_id].course_name} [Leave field blank to cancel]")
+                            print()
+                            print(f"{'Quiz Title':<15} {'ID':<10} {'Name':<25} {'Score'}")
+                            print("=" * 85)
+                            available_quiz_title = []
+                            has_quiz = False
+                            for quiz_id, quiz in quizzes.items():
+                                if quiz.course_id == course_id:
+                                    print(f"{quiz.quiz_title:<15} {quiz.student_id:<10} {students[quiz.student_id].name():<25} {quiz.score}")
+                                    available_quiz_title.append(quiz.quiz_title)
+                                    has_quiz = True
 
-                        if not selected_quiz_title.strip():
-                            input("\nPress Enter to continue...")
-                            break
-                        
-                        if selected_quiz_title not in available_quiz_title:
-                            print("Selected quiz title not found")
-                            input("\nPress Enter to continue...")
-                            continue
-                        
-                        util.clear_screen()
-                        print(f"Student who got score equal or greater to {threshold}\non the course {courses[course_id].course_name}, quiz {selected_quiz_title} ")
-
-                        print("=" * 85)
-                        print(f"{'Quiz Title':<20} {'Student Name':<25} {'Score':<10}")
-                        print("=" * 85)
-                        
-                        for quiz_id, quiz in quizzes.items():
-                            if not quiz.score >= threshold:
-                                continue
-                            if quiz.course_id == course_id and selected_quiz_title == quiz.quiz_title:
-                                student = students[quiz.student_id]
-                                print(f"{quiz.quiz_title:<20} {student.fname + ' ' + student.lname:<25} {quiz.score:<10}")
-                                found = True
-                        
-                        input("\nPress Enter to continue...")
-                        
-
-                        if not found:
-                            print("No quizzes found for this course.")
-                            input("\nPress Enter to continue...")
-                        
-                        
-                else:
-                    print("No data to display.")
-                    input("\nPress Enter to continue...")
-            elif choice == '4':
-                util.clear_screen()
-                display.course_table_display(courses)
-                print("\nCompute Average, Lowest, and Highest Scores by Course")
-                print("=" * 85)
-                course_id = input("Enter Course ID to compute statistics: ")
-
-                if course_id in courses:
-                    while True:
-                        util.clear_screen()
-                        print(f"Computing statistical report for {courses[course_id].course_name}")
-                        print()
-                        total_score = 0
-                        quiz_count = 0
-                        lowest_score = float('inf')
-                        highest_score = float('-inf')
-                        lowest_student = None
-                        highest_student = None
-                        available_quiz_title = []
-                        print(f"{'Quiz Title:':<15} {'ID:':<10} {'Name:':<25} {'Score'}")
-                        print("=" * 85)
-                        for quiz_id, quiz in quizzes.items():
-                            if quiz.course_id == course_id:
-                                print(f"{quiz.quiz_title:<15} {quiz.student_id:<10} {students[quiz.student_id].name():<25} {quiz.score}")
-                                available_quiz_title.append(quiz.quiz_title)
-
-                        print()
-                        selected_quiz_title = input("Select quiz title: ")
-
-                        if not selected_quiz_title.strip():
-                            input("\nPress Enter to continue...")
-                            break
-                        
-                        if selected_quiz_title not in available_quiz_title:
-                            print("Selected quiz title not found")
-                            input("\nPress Enter to continue...")
-                            continue
-
-
-                        for quiz in quizzes.values():
-                            if quiz.course_id == course_id and quiz.quiz_title == selected_quiz_title:
-                                total_score += quiz.score
-                                quiz_count += 1
-                                if quiz.score < lowest_score:
-                                    lowest_score = quiz.score
-                                    lowest_student = quiz.student_id
-                                if quiz.score > highest_score:
-                                    highest_score = quiz.score
-                                    highest_student = quiz.student_id
-
-                        if quiz_count > 0:
-                            average_score = total_score / quiz_count
-                            print(f"\nStatistics for course {course_id} ({courses[course_id].course_name}) quiz {selected_quiz_title}:")
-                            print(f"Average Score: {average_score:.2f}")
-                            print(f"Lowest Score : {lowest_score:.2f} ({students[lowest_student].name()})")
-                            print(f"Highest Score: {highest_score:.2f} ({students[highest_student].name()})")
-                        else:
-                            print(f"No quizzes found for course {course_id}.")
+                            if not has_quiz:
+                                print("No quiz added to this course.")
+                                input("\nPress Enter to continue...")
+                                break
                             
+                            print()
+                            selected_quiz_title = input("Quiz title : ")
+                            
+                            if not selected_quiz_title.strip():
+                                break
+                            
+                            if selected_quiz_title not in available_quiz_title:
+                                print("Selected quiz title not found")
+                                input("\nPress Enter to continue...")
+                                continue
+
+                            threshold = input("Threshold  : ")  
+
+                            if not threshold.strip():
+                                threshold = 0
+                            else:
+                                threshold = int(threshold)
+                            
+                            util.clear_screen()
+
+                            print(f"{courses[course_id].course_name.upper()}, Quiz: {selected_quiz_title}")
+                            if threshold > 0:
+                                print(f"Student who got score equal or greater to {threshold}.")
+
+                            print("=" * 85)
+                            print(f"{'Quiz Title':<20} {'Student Name':<25} {'Score':<10}")
+                            print("=" * 85)
+                            
+                            for quiz_id, quiz in quizzes.items():
+                                if not quiz.score >= threshold:
+                                    continue
+                                if quiz.course_id == course_id and selected_quiz_title == quiz.quiz_title:
+                                    student = students[quiz.student_id]
+                                    print(f"{quiz.quiz_title:<20} {student.fname + ' ' + student.lname:<25} {quiz.score:<10}")
+                                    found = True
+                            
+
+                            if not found:
+                                print("No student got the score threshold.")
+                                
+                            input("\nPress Enter to continue...") 
+                    else:
+                        print("No data to display.")
                         input("\nPress Enter to continue...")
-                else:
-                    print("No data to display.")
-                    input("\nPress Enter to continue...")
+            elif choice == '4':
+                while True:
+                    util.clear_screen()
+                    display.course_table_display(courses)
+                    print("\nCompute Average, Lowest, and Highest Scores by Course [Leave fields blank to exit]")
+                    print("-" * 85)
+                    course_id = input("Course ID: ")
+
+                    if not course_id.strip():
+                        break  
+
+                    if course_id in courses:
+                        while True:
+                            util.clear_screen()
+                            print(f"Computing statistical report for {courses[course_id].course_name} [Leave field blank to cancel]")
+                            print()
+                            total_score = 0
+                            quiz_count = 0
+                            lowest_score = float('inf')
+                            highest_score = float('-inf')
+                            lowest_student = None
+                            highest_student = None
+                            available_quiz_title = []
+                            has_quiz = False
+                            print(f"{'Quiz Title':<15} {'ID':<10} {'Name':<25} {'Score'}")
+                            print("=" * 85)
+                            for quiz_id, quiz in quizzes.items():
+                                if quiz.course_id == course_id:
+                                    print(f"{quiz.quiz_title:<15} {quiz.student_id:<10} {students[quiz.student_id].name():<25} {quiz.score}")
+                                    available_quiz_title.append(quiz.quiz_title)
+                                    has_quiz = True
+
+                            if not has_quiz:
+                                print("No quiz added to this course.")
+                                input("\nPress Enter to continue...")
+                                break
+
+
+                            print()
+                            selected_quiz_title = input("Select quiz title: ")
+
+                            if not selected_quiz_title.strip():
+                                break
+                            
+                            if selected_quiz_title not in available_quiz_title:
+                                print("Selected quiz title not found")
+                                input("\nPress Enter to continue...")
+                                continue
+
+
+                            for quiz in quizzes.values():
+                                if quiz.course_id == course_id and quiz.quiz_title == selected_quiz_title:
+                                    total_score += quiz.score
+                                    quiz_count += 1
+                                    if quiz.score < lowest_score:
+                                        lowest_score = quiz.score
+                                        lowest_student = quiz.student_id
+                                    if quiz.score > highest_score:
+                                        highest_score = quiz.score
+                                        highest_student = quiz.student_id
+
+                            if quiz_count > 0:
+                                average_score = total_score / quiz_count
+                                print(f"\nStatistics for course {course_id} ({courses[course_id].course_name}) quiz {selected_quiz_title}:")
+                                print(f"Average Score: {average_score:.2f}")
+                                print(f"Lowest Score : {lowest_score:.2f} ({students[lowest_student].name()})")
+                                print(f"Highest Score: {highest_score:.2f} ({students[highest_student].name()})")
+                            else:
+                                print(f"No quizzes found for course {course_id}.")
+                                
+                            input("\nPress Enter to continue...")
+                    else:
+                        print("No data to display.")
+                        input("\nPress Enter to continue...")
             elif choice == '5':
                 return
 

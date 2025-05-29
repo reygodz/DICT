@@ -5,7 +5,9 @@ def validate_choice(choice, max_range):
     if choice.isdigit() and 1 <= int(choice) <= max_range:
         return True
     else:
+        set_cursor_coordinate(10, 15)
         print(f"Invalid choice, please enter a number between 1 and {max_range}.")
+        set_cursor_coordinate(10, 16)
         input("Press Enter to continue...")
         return False
 
