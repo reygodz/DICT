@@ -52,14 +52,25 @@ class Quiz:
 def main_menu():
     while True:
         util.clear_screen()
-        print("Welcome to the Student Management System\n")
-        print("1. Manage Students")
-        print("2. Manage Courses")
-        print("3. Manage Enrollments")
-        print("4. Manage Quizzes")
-        print("5. Exit")
+        util.set_cursor_coordinate(10,5)
+        print("Student Management System".upper())
+        util.set_cursor_coordinate(10,6)
+        print("-" * 25)
+        util.set_cursor_coordinate(10,7)
+        print("[1] Manage Students")
+        util.set_cursor_coordinate(10,8)
+        print("[2] Manage Courses")
+        util.set_cursor_coordinate(10,9)
+        print("[3] Manage Enrollments")
+        util.set_cursor_coordinate(10,10)
+        print("[4] Manage Quizzes")
+        util.set_cursor_coordinate(10,11)
+        print("[5] Exit")
+        util.set_cursor_coordinate(10,12)
+        print("-" * 25)
+        util.set_cursor_coordinate(10,13)
         choice = input("Enter your choice: ")
-        if util.validate_choice(choice, 5):
+        if util.validate_choice(choice, 10):
             if choice == '1':
                 manage_students()
             elif choice == '2':
@@ -78,21 +89,32 @@ def main_menu():
 def manage_students():
     while True:
         util.clear_screen()
-        print("Manage Students\n")
-        print("1. Add Student")
-        print("2. Update Student")
-        print("3. Delete Student")
-        print("4. View Students")
-        print("5. Back to Main Menu")
-        choice = input("Enter your choice: ")
+        util.set_cursor_coordinate(10,5)
+        print("Manage Students".upper())
+        util.set_cursor_coordinate(10,6)
+        print("-"*25)
+        util.set_cursor_coordinate(10,7)
+        print("[1] Add Student")
+        util.set_cursor_coordinate(10,8)
+        print("[2] Update Student")
+        util.set_cursor_coordinate(10,9)
+        print("[3] Delete Student")
+        util.set_cursor_coordinate(10,10)
+        print("[4] View Students")
+        util.set_cursor_coordinate(10,11)
+        print("[5] Back to Main Menu")
+        util.set_cursor_coordinate(10,12)
+        print("-"*25)
+        util.set_cursor_coordinate(10,13)
+        choice = input("Enter choice: ")
 
         if util.validate_choice(choice, 5):
             if choice == '1':
                 while True:
                     util.clear_screen()
                     display.all_students_table_display(students)
-                    print("\nAdd New Student [Leave Student ID blank to cancel]")
-                    print("=" * 85)
+                    print("\nAdd New Student [Leave fields blank to exit]".upper())
+                    print("-" * 85)
                     print()
                     student_id = input("Student ID: ")
                     if student_id in students:
@@ -101,6 +123,7 @@ def manage_students():
                         continue
                     if not student_id.strip():
                         break
+
                     fname = input("First Name : ")
                     lname = input("Last Name  : ")
                     address = input("Address  : ")
@@ -110,54 +133,86 @@ def manage_students():
                     input("\nPress Enter to continue...")
                     
             elif choice == '2':
-                util.clear_screen()
-                display.all_students_table_display(students)
-                print()
-                print("Update Student Information \n[Leave fields blank to exit]")
-                print("=" * 85)
-                print()
-                student_id = input("Enter Student ID to update: ")
-                if student_id in students:
-                    display.specific_student_table_display(students[student_id])
-                    print("=" * 85)
-                    fname = input("New First Name : ") or students[student_id].fname
-                    lname = input("New Last Name  : ") or students[student_id].lname
-                    address = input("New Address    : ") or students[student_id].address
-                    students[student_id].fname = fname
-                    students[student_id].lname = lname
-                    students[student_id].address = address
-                    print(f"Student {student_id} updated successfully.")
-                else:
-                    print("Student not found.")
-
-                input("\nPress Enter to continue...")
-            elif choice == '3':
-                util.clear_screen()
-                display.all_students_table_display(students)
-                print("\nDelete Student")
-                print("=" * 85)
-                student_id = input("\nEnter Student ID to delete: ")
-                if student_id in students:
+                while True:
                     util.clear_screen()
-                    display.specific_student_table_display(students[student_id])
-                    print("=" * 85)
-                    confirm = input("Are you sure you want to delete this student? (y/n): ").strip().lower()
-                    if confirm == 'y':
-                        del students[student_id]
-                        print(f"Student {student_id} deleted successfully.")
-                        input("\nPress Enter to continue...")
-                    elif confirm == 'n':
-                        print("Deletion cancelled.")
-                        input("\nPress Enter to continue...")
-                        continue
-                    else:
-                        print("Invalid input. Deletion cancelled.")
-                        input("\nPress Enter to continue...")
-                        continue
-                else:
-                    print("Student not found.")
+                    display.all_students_table_display(students)
+                    print()
+                    print("Update Student Information [Leave fields blank to exit]".upper())
+                    print("-" * 85)
+                    print()
+                    student_id = input("Student ID to update: ")
+                    if not student_id.strip():
+                        break
 
-                input("\nPress Enter to continue...")
+                    if student_id in students:
+                        util.clear_screen()
+                        print("Update Student Information [Leave fields blank to keep current data]\n".upper())
+                        display.specific_student_table_display(students[student_id])
+                        print()
+                        print("First Name : ")
+                        print("Last Name  : ")
+                        print("Address    : ")
+
+                        util.set_cursor_coordinate(14,7)
+                        fname = input() or students[student_id].fname
+                        if fname == students[student_id].fname:
+                            util.set_cursor_coordinate(14,7)
+                            print(students[student_id].fname)
+
+                        util.set_cursor_coordinate(14,8)
+                        lname = input() or students[student_id].lname
+                        if lname == students[student_id].lname:
+                            util.set_cursor_coordinate(14,8)
+                            print(students[student_id].lname)
+
+                        util.set_cursor_coordinate(14,9)
+                        address = input() or students[student_id].address
+                        if address == students[student_id].address:
+                            util.set_cursor_coordinate(14,9)
+                            print(students[student_id].address)
+
+                        students[student_id].fname = fname
+                        students[student_id].lname = lname
+                        students[student_id].address = address
+                        print(f"\nStudent {student_id} updated successfully.")
+                    else:
+                        print("Student not found.")
+
+                    input("\nPress Enter to continue...")
+            elif choice == '3':
+                while True:
+                    util.clear_screen()
+                    display.all_students_table_display(students)
+                    print("\nDelete Student [Leave fields blank to exit]".upper())
+                    print("-" * 85)
+                    student_id = input("\nStudent ID to delete: ")
+
+                    if not student_id.strip():
+                        break
+
+                    if student_id in students:
+                        util.clear_screen()
+                    
+                        display.specific_student_table_display(students[student_id])
+                        print()
+                        confirm = input("Are you sure you want to delete this student? (y/n): ").strip().lower()
+                        if confirm == 'y':
+                            del students[student_id]
+                            print(f"Student {student_id} deleted successfully.")
+                            input("\nPress Enter to continue...")
+                        elif confirm == 'n':
+                            print("Deletion cancelled.")
+                            input("\nPress Enter to continue...")
+                            continue
+                        else:
+                            print("Invalid input. Deletion cancelled.")
+                            input("\nPress Enter to continue...")
+                            continue
+                    else:
+                        print("Student not found.")
+                        input("\nPress Enter to continue...")
+
+                    
             elif choice == '4':
                 util.clear_screen()
                 display.all_students_table_display(students)
@@ -168,12 +223,23 @@ def manage_students():
 def manage_courses():
     while True:
         util.clear_screen()
-        print("Manage Courses\n")
-        print("1. Add Course")
-        print("2. Update Course")
-        print("3. Delete Course")
-        print("4. View Courses")
-        print("5. Back to Main Menu")
+        util.set_cursor_coordinate(10,5)
+        print("Manage Courses".upper())
+        util.set_cursor_coordinate(10,6)
+        print("-"*25)
+        util.set_cursor_coordinate(10,7)
+        print("[1] Add Course")
+        util.set_cursor_coordinate(10,8)
+        print("[2] Update Course")
+        util.set_cursor_coordinate(10,9)
+        print("[3] Delete Course")
+        util.set_cursor_coordinate(10,10)
+        print("[4] View Courses")
+        util.set_cursor_coordinate(10,11)
+        print("[5] Back to Main Menu")
+        util.set_cursor_coordinate(10,12)
+        print("-"*25)
+        util.set_cursor_coordinate(10,13)
         choice = input("Enter your choice: ")
 
         if util.validate_choice(choice, 5):
@@ -263,12 +329,23 @@ def manage_courses():
 def manage_enrollments():
     while True:
         util.clear_screen()
-        print("Manage Enrollments\n")
-        print("1. Enroll Course")
-        print("2. Drop Course")
-        print("3. View Enrollments")
-        print("4. Filter by Course")
-        print("5. Back to Main Menu")
+        util.set_cursor_coordinate(10,5)
+        print("Manage Enrollments".upper)
+        util.set_cursor_coordinate(10,6)
+        print("-"*25)
+        util.set_cursor_coordinate(10,7)
+        print("[1] Enroll Course")
+        util.set_cursor_coordinate(10,8)
+        print("[2] Drop Course")
+        util.set_cursor_coordinate(10,9)
+        print("[3] View Enrollments")
+        util.set_cursor_coordinate(10,10)
+        print("[4] Filter by Course")
+        util.set_cursor_coordinate(10,11)
+        print("[5] Back to Main Menu")
+        util.set_cursor_coordinate(10,12)
+        print("-"*25)
+        util.set_cursor_coordinate(10,13)
         choice = input("Enter your choice: ")
 
         if util.validate_choice(choice, 5):
@@ -409,12 +486,23 @@ def manage_enrollments():
 def manage_quizzes():
     while True:
         util.clear_screen()
-        print("Manage Quizzes\n")
-        print("1. Add Quiz")
-        print("2. View Quizzes")
-        print("3. Filter Quizzes by Course")
-        print("4. Compute Average by Course")
-        print("5. Back to Main Menu")
+        util.set_cursor_coordinate(10,5)
+        print("Manage Quizzes".upper())
+        util.set_cursor_coordinate(10,6)
+        print("-"*25)
+        util.set_cursor_coordinate(10,7)
+        print("[1] Add Quiz")
+        util.set_cursor_coordinate(10,8)
+        print("[2] View Quizzes")
+        util.set_cursor_coordinate(10,9)
+        print("[3] Filter Quizzes by Course")
+        util.set_cursor_coordinate(10,10)
+        print("[4] Compute Average by Course")
+        util.set_cursor_coordinate(10,11)
+        print("[5] Back to Main Menu")
+        util.set_cursor_coordinate(10,12)
+        print("-"*25)
+        util.set_cursor_coordinate(10,13)
         choice = input("Enter your choice: ")
 
         if util.validate_choice(choice, 5):

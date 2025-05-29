@@ -5,7 +5,7 @@ def specific_student_table_display(student):
 
 def all_students_table_display(students):
     if students:
-        print("\nRegistered Students")
+        print("\nRegistered Students".upper())
         print("=" * 85)
         print(f"{'Student ID':<15} {'First Name':<20} {'Last Name':<20} {'Address':<30}")
         print("=" * 85)

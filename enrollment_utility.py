@@ -14,3 +14,6 @@ def generate_random_id():
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+def set_cursor_coordinate(x, y):
+    print(f"\033[{y};{x}H", end='')
