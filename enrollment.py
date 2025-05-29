@@ -123,15 +123,54 @@ def manage_students():
                         continue
                     if not student_id.strip():
                         break
-
-                    fname = input("First Name : ")
-                    lname = input("Last Name  : ")
-                    address = input("Address  : ")
-                    students[student_id] = Student(student_id, fname, lname, address)
-                    print(f"Student {fname} {lname} added successfully.")
-                    db.save_student_csv(students)
-                    input("\nPress Enter to continue...")
                     
+                    while True:
+                        util.clear_screen()
+                        util.set_cursor_coordinate(10,5)
+                        print("Add New Student".upper())
+                        util.set_cursor_coordinate(10,6)
+                        print("-" * 25)
+
+                        util.set_cursor_coordinate(10,7)
+                        print("Student ID :", student_id)
+                        util.set_cursor_coordinate(10,8)
+                        print("First Name :")
+                        util.set_cursor_coordinate(10,9)
+                        print("Last Name  :")
+                        util.set_cursor_coordinate(10,10)
+                        print("Address    :")
+                        util.set_cursor_coordinate(10,11)
+                        print("-" * 25)
+
+                        util.set_cursor_coordinate(23,8)
+                        fname = input()
+                        util.set_cursor_coordinate(23,9)
+                        lname = input()
+                        util.set_cursor_coordinate(23,10)
+                        address = input()
+
+                        
+                        if not all(field.strip() for field in [fname, lname, address]):
+                            util.set_cursor_coordinate(10,13)
+                            confirm = input("All fields are required, Do you want to try again? (y/n): ").strip().lower()
+                            
+                            if confirm == 'y':
+                                continue
+                            elif confirm == 'n':
+                                break
+                            else:
+                                util.set_cursor_coordinate(10,14)
+                                print("Invalid input.")
+                                util.set_cursor_coordinate(10,15)
+                                input("Press Enter to continue...")
+ 
+                        students[student_id] = Student(student_id, fname, lname, address)
+                        util.set_cursor_coordinate(10,13)
+                        print(f"Student {fname} {lname} added successfully.")
+                        db.save_student_csv(students)
+                        util.set_cursor_coordinate(10,14)
+                        input("Press Enter to continue...")
+                        break                
             elif choice == '2':
                 while True:
                     util.clear_screen()
@@ -140,6 +179,7 @@ def manage_students():
                     print("Update Student Information [Leave fields blank to exit]".upper())
                     print("-" * 85)
                     print()
+
                     student_id = input("Student ID to update: ")
                     if not student_id.strip():
                         break
@@ -175,6 +215,7 @@ def manage_students():
                         students[student_id].lname = lname
                         students[student_id].address = address
                         print(f"\nStudent {student_id} updated successfully.")
+                        db.save_course_csv(students)
                     else:
                         print("Student not found.")
 
@@ -199,6 +240,7 @@ def manage_students():
                         if confirm == 'y':
                             del students[student_id]
                             print(f"Student {student_id} deleted successfully.")
+                            db.save_student_csv(students)
                             input("\nPress Enter to continue...")
                         elif confirm == 'n':
                             print("Deletion cancelled.")
@@ -211,8 +253,6 @@ def manage_students():
                     else:
                         print("Student not found.")
                         input("\nPress Enter to continue...")
-
-                    
             elif choice == '4':
                 util.clear_screen()
                 display.all_students_table_display(students)
@@ -247,77 +287,141 @@ def manage_courses():
                 while True:
                     util.clear_screen()
                     display.course_table_display(courses)
-                    print("\nAdd New Course [Leave Student ID blank to cancel]")
-                    print("=" * 60)
-                    course_id = input("Course ID       : ")
+                    print("\nAdd New Course [Leave fields blank to exit]".upper())
+                    print("-" * 85)
+
+                    course_id = input("Course ID: ")
+
+                    if not course_id.strip():
+                        break
+
                     if course_id in courses:
                         print("Course ID already exists. Please try again.")
                         input("\nPress Enter to continue...")
                         continue
-                    if not course_id.strip():
-                        input("\nPress Enter to continue...")
-                        break
 
-                    course_name = input("Course Name     : ")
-                    instructor = input("Instructor Name : ")
-                    courses[course_id] = Course(course_id, course_name, instructor)
-                    print(f"Course {course_name} added successfully.")
-                    db.save_course_csv(courses)
-                    input("\nPress Enter to continue...")
+                    while True:
+                        util.clear_screen()
+                        util.set_cursor_coordinate(10,5)
+                        print("Add New Course".upper())
+                        util.set_cursor_coordinate(10,6)
+                        print("-" * 25)
+
+                        util.set_cursor_coordinate(10,7)
+                        print("ID         : ")
+
+                        util.set_cursor_coordinate(10,8)
+                        print("Name       : ")
+
+                        util.set_cursor_coordinate(10,9)
+                        print("Instructor : ")
+
+                        util.set_cursor_coordinate(10,10)
+                        print("-" * 25)
+
+                        util.set_cursor_coordinate(23,7)
+                        print(course_id)
+
+                        util.set_cursor_coordinate(23,8)
+                        course_name = input()
+
+                        util.set_cursor_coordinate(23,9)
+                        instructor = input()
+
+                        if not all(field.strip() for field in [course_name, instructor]):
+                            util.set_cursor_coordinate(10,13)
+                            confirm = input("All fields are required, Do you want to try again? (y/n): ").strip().lower()
+                            
+                            if confirm == 'y':
+                                continue
+                            elif confirm == 'n':
+                                break
+                            else:
+                                util.set_cursor_coordinate(10,14)
+                                print("Invalid input.")
+                                util.set_cursor_coordinate(10,15)
+                                input("Press Enter to continue...")
+
+                        courses[course_id] = Course(course_id, course_name, instructor)
+                        util.set_cursor_coordinate(10,12)
+                        print(f"Course {course_name} added successfully.")
+                        db.save_course_csv(courses)
+                        util.set_cursor_coordinate(10,13)
+                        input("Press Enter to continue...")
+                        break
                     
             elif choice == '2':
-                util.clear_screen()
-
-                display.course_table_display(courses)
-                print()
-                print("Update Course Information \n[Leave fields blank to keep current values]")
-
-
-                print("=" * 60)
-                course_id = input("Enter Course ID to update: ")
-                print()
-                if course_id in courses:
-                    display.specific_course_table_display(courses[course_id])
-                    print("=" * 60)
-                    course_name = input("New Course Name     : ") or courses[course_id].course_name
-                    instructor = input("New Instructor Name : ") or courses[course_id].instructor
-                    courses[course_id].course_name = course_name
-                    courses[course_id].instructor = instructor
-                    print(f"Course {course_id} updated successfully.")
-                else:
-                    print("Course not found.")
-                
-                input("\nPress Enter to continue...")
-            elif choice == '3':
-                util.clear_screen()
-                display.course_table_display(courses)
-                print("\nDelete Course")
-                print("=" * 60)
-                course_id = input("Course ID to delete: ")
-                print()
-                if course_id in courses:
+                while True:
                     util.clear_screen()
-                    display.specific_course_table_display(courses[course_id])
-                    print("=" * 60)
-                    confirm = input("Are you sure you want to delete this course? (yes/no): ").strip().lower()
-                    if confirm == 'y':
-                        del courses[course_id]
-                        print(f"Course {course_id} deleted successfully.")
-                        input("\nPress Enter to continue...")
-                        continue
-                    elif confirm == 'n':
-                        print("Deletion cancelled.")
-                        input("\nPress Enter to continue...")
-                        continue
-                    else:
-                        print("Invalid input. Deletion cancelled.")
-                        input("\nPress Enter to continue...")
-                        continue
 
-                else:
-                    print("Course not found.")
-                
-                input("\nPress Enter to continue...")
+                    display.course_table_display(courses)
+                    print()
+                    print("Update Course Information [Leave fields blank to exit]".upper())
+                    print("-" * 85)
+                    print()
+
+                    course_id = input("Course ID to update: ")
+                    if not course_id.strip():
+                            break
+                    
+                    if course_id in courses:
+                        util.clear_screen()
+                        print("Update Student Information [Leave fields blank to keep current data]\n".upper())    
+                        display.specific_course_table_display(courses[course_id])
+                        print()
+                        print("Course Name     : ")
+                        print("Instructor Name : ")
+
+                        util.set_cursor_coordinate(19,7)
+                        course_name = input() or courses[course_id].course_name
+                        if course_name == courses[course_id].course_name:
+                                util.set_cursor_coordinate(19,7)
+                                print(courses[course_id].course_name)
+                        
+                        util.set_cursor_coordinate(19,8)
+                        instructor = input() or courses[course_id].instructor
+                        if instructor == courses[course_id].instructor:
+                                util.set_cursor_coordinate(19,8)
+                                print(courses[course_id].instructor)
+
+                        courses[course_id].course_name = course_name
+                        courses[course_id].instructor = instructor
+                        print(f"Course {course_id} updated successfully.")
+                        db.save_course_csv(courses)
+                    else:
+                        print("Course not found.")
+                    
+                    input("\nPress Enter to continue...")
+            elif choice == '3':
+                while True:
+                    util.clear_screen()
+                    display.course_table_display(courses)
+                    print("\nDelete Course")
+                    print("=" * 60)
+                    course_id = input("Course ID to delete: ")
+                    print()
+                    if course_id in courses:
+                        util.clear_screen()
+                        display.specific_course_table_display(courses[course_id])
+                        print("=" * 60)
+                        confirm = input("Are you sure you want to delete this course? (yes/no): ").strip().lower()
+                        if confirm == 'y':
+                            del courses[course_id]
+                            print(f"Course {course_id} deleted successfully.")
+                            db.save_course_csv(courses)
+                            input("\nPress Enter to continue...")
+                            continue
+                        elif confirm == 'n':
+                            print("Deletion cancelled.")
+                            input("\nPress Enter to continue...")
+                            continue
+                        else:
+                            print("Invalid input. Deletion cancelled.")
+                            input("\nPress Enter to continue...")
+                            continue
+                    else:
+                        print("Course not found.")
+                        input("\nPress Enter to continue...")
             elif choice == '4':
                 util.clear_screen()
                 display.course_table_display(courses)
