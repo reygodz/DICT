@@ -658,7 +658,7 @@ def manage_quizzes():
         util.set_cursor_coordinate(10,9)
         print("[3] Filter Quizzes by Course")
         util.set_cursor_coordinate(10,10)
-        print("[4] Compute Average by Course")
+        print("[4] Compute Grade")
         util.set_cursor_coordinate(10,11)
         print("[5] Back to Main Menu")
         util.set_cursor_coordinate(10,12)
@@ -916,7 +916,7 @@ def manage_quizzes():
 
                             if quiz_count > 0:
                                 average_score = total_score / quiz_count
-                                print(f"\nStatistics for course {course_id} ({courses[course_id].course_name}) quiz {selected_quiz_title}:")
+                                print(f"\nStatistics for course {course_id} ({courses[course_id].course_name}) quiz {selected_quiz_title}\n")
                                 print(f"Average Score: {average_score:.2f}")
                                 print(f"Lowest Score : {lowest_score:.2f} ({students[lowest_student].name()})")
                                 print(f"Highest Score: {highest_score:.2f} ({students[highest_student].name()})")
@@ -994,5 +994,4 @@ def __init__():
     main_menu()
 
 
-if __name__ == "__main__":
-    __init__()
+__init__()
