@@ -23,10 +23,10 @@ def course_table_display(courses, title="Offered Course(s)"):
     if courses:
         print(title.upper())
         print("=" * 85)
-        print(f"{'Course ID':<15} {'Course Name':<20} {'Instructor':<20}")
+        print(f"{'Course ID':<15} {'Course Name':<35} {'Instructor':<20}")
         print("=" * 85)
         for course in courses.values():
-            print(f"{course.course_id:<15} {course.course_name:<20} {course.instructor:<20}")
+            print(f"{course.course_id:<15} {course.course_name:<35} {course.instructor:<20}")
 
     else:
         print("No courses available.")

@@ -163,6 +163,7 @@ def manage_students():
                                 print("Invalid input.")
                                 util.set_cursor_coordinate(10,15)
                                 input("Press Enter to continue...")
+                                continue
  
                         students[student_id] = Student(student_id, fname, lname, address)
                         util.set_cursor_coordinate(10,13)
@@ -215,7 +216,7 @@ def manage_students():
                         students[student_id].lname = lname
                         students[student_id].address = address
                         print(f"\nStudent {student_id} updated successfully.")
-                        db.save_course_csv(students)
+                        db.save_student_csv(students)
                     else:
                         print("Student not found.")
 
@@ -341,6 +342,7 @@ def manage_courses():
                                 print("Invalid input.")
                                 util.set_cursor_coordinate(10,15)
                                 input("Press Enter to continue...")
+                                continue
 
                         courses[course_id] = Course(course_id, course_name, instructor)
                         util.set_cursor_coordinate(10,12)
@@ -399,12 +401,15 @@ def manage_courses():
                     print("\nDelete Course")
                     print("=" * 60)
                     course_id = input("Course ID to delete: ")
+                    if not course_id.strip():
+                        break
+
                     print()
                     if course_id in courses:
                         util.clear_screen()
                         display.specific_course_table_display(courses[course_id])
                         print("=" * 60)
-                        confirm = input("Are you sure you want to delete this course? (yes/no): ").strip().lower()
+                        confirm = input("Are you sure you want to delete this course? (y/n): ").strip().lower()
                         if confirm == 'y':
                             del courses[course_id]
                             print(f"Course {course_id} deleted successfully.")
@@ -930,51 +935,88 @@ def manage_quizzes():
             elif choice == '5':
                 return
 
-def __init__():
-    '''print("Initializing the Student Management System...")
+def init():
+    print("Initializing the Student Management System...")
 
-
+    '''
     # Add dummy students
     s1 = Student("1111", "John", "Doe", "Tagbilaran City")
     s2 = Student("2222", "Jane", "Smith", "Calapen City")
     s3 = Student("3333", "Odette", "Johnson", "Clarin City")
     s4 = Student("4444", "Ruby", "Roger", "Tubigon City")
     s5 = Student("5555", "Juan", "Dela Cruz", "Loon City")
+    s6 = Student("6666", "Maria", "Reyes", "Ubay City")
+    s7 = Student("7777", "Jose", "Santos", "Talibon City")
+    s8 = Student("8888", "Ana", "Lopez", "Sikatuna City")
+    s9 = Student("9999", "Carlos", "Garcia", "Candijay City")
+    s10 = Student("1010", "Luz", "Torres", "Jagna City")
 
     students[s1.student_id] = s1
     students[s2.student_id] = s2
     students[s3.student_id] = s3
     students[s4.student_id] = s4
     students[s5.student_id] = s5
+    students[s6.student_id] = s6
+    students[s7.student_id] = s7
+    students[s8.student_id] = s8
+    students[s9.student_id] = s9
+    students[s10.student_id] = s10
 
 
     # Add dummy courses
-    c1 = Course("CS101", "Mathematics", "Dr. Wakwak")
-    c2 = Course("CS102", "Science", "Prof. Proton")
-    c3 = Course("CS103", "History", "Dr. Time")
-    c4 = Course("CS104", "Art", "Ms. Canvas")
+    c1 = Course("GE Math", "Mathematics", "Dr. Wakwak")
+    c2 = Course("GE SCI", "Science", "Prof. Proton")
+    c3 = Course("GE HIS", "History", "Dr. Time")
+    c4 = Course("GE ART", "Art", "Ms. Canvas")
+    c5 = Course("GE PL", "Philippine Literature", "Dr. Mabini")
+    c6 = Course("CS101", "Programming Fundamentals", "Engr. Lopez")
+    c7 = Course("CS102", "Web Development", "Prof. Santiago")
+    c8 = Course("CS103", "Database Systems", "Engr. Cruz")
+    c9 = Course("CS104", "Object Oriented Programming", "Engr. Cruz")
     courses[c1.course_id] = c1
     courses[c2.course_id] = c2
     courses[c3.course_id] = c3
     courses[c4.course_id] = c4
+    courses[c5.course_id] = c5
+    courses[c6.course_id] = c6
+    courses[c7.course_id] = c7
+    courses[c8.course_id] = c8
+    courses[c9.course_id] = c9
+    
 
     # Add dummy enrollments
     e1 = Enrollment(s1.student_id, ["CS101", "CS102", "CS103"])
     e2 = Enrollment(s2.student_id, ["CS101", "CS104"])
     e3 = Enrollment(s3.student_id, ["CS102", "CS103", "CS104"])
+    e4 = Enrollment(s4.student_id, ["CS101", "CS102"])
+    e5 = Enrollment(s5.student_id, ["CS103", "CS104"])
+    e6 = Enrollment(s6.student_id, ["CS101", "CS102", "CS103", "CS104"])
+    e7 = Enrollment(s7.student_id, ["CS101", "CS103"])
+    e8 = Enrollment(s8.student_id, ["CS102", "CS104"])
+    e9 = Enrollment(s9.student_id, ["CS101", "CS102"])
+    e10 = Enrollment(s10.student_id, ["CS103", "CS104"])
+
     enrolled[s1.student_id] = e1
     enrolled[s2.student_id] = e2
     enrolled[s3.student_id] = e3
+    enrolled[s4.student_id] = e4
+    enrolled[s5.student_id] = e5
+    enrolled[s6.student_id] = e6
+    enrolled[s7.student_id] = e7
+    enrolled[s8.student_id] = e8
+    enrolled[s9.student_id] = e9
+    enrolled[s10.student_id] = e10
 
-    q1 = Quiz(generate_random_id(), "Q1", s1.student_id, c1.course_id, 85)
-    q2 = Quiz(generate_random_id(), "Q1", s2.student_id, c1.course_id, 90)
-    q3 = Quiz(generate_random_id(), "Q1", s3.student_id, c1.course_id, 75)
-    q4 = Quiz(generate_random_id(), "Q1", s1.student_id, c2.course_id, 80)
-    q5 = Quiz(generate_random_id(), "Q1", s2.student_id, c2.course_id, 87)
-    q6 = Quiz(generate_random_id(), "Q1", s3.student_id, c2.course_id, 90)
-    q7 = Quiz(generate_random_id(), "Q1", s1.student_id, c3.course_id, 77)
-    q8 = Quiz(generate_random_id(), "Q1", s2.student_id, c3.course_id, 88)
-    q9 = Quiz(generate_random_id(), "Q1", s3.student_id, c3.course_id, 99)
+    #Add dummy quiz
+    q1 = Quiz(util.generate_random_id(), "Quiz 1: Variables & Data Types", s1.student_id, c6.course_id, 89)
+    q2 = Quiz(util.generate_random_id(), "Quiz 1: Variables & Data Types", s2.student_id, c6.course_id, 85)
+    q3 = Quiz(util.generate_random_id(), "Quiz 1: Class and Objects", s3.student_id, c9.course_id, 91)
+    q4 = Quiz(util.generate_random_id(), "Quiz 1: Attributes and Function", s5.student_id, c9.course_id, 84)
+    q5 = Quiz(util.generate_random_id(), "Quiz 1: HTML & CSS", s1.student_id, c7.course_id, 88)
+    q6 = Quiz(util.generate_random_id(), "Quiz 1: HTML & CSS", s1.student_id, c7.course_id, 90)
+    q7 = Quiz(util.generate_random_id(), "Quiz 1: Relational Databases", s4.student_id, c8.course_id, 83)
+    q8 = Quiz(util.generate_random_id(), "Quiz 1: Relational Databases", s5.student_id, c8.course_id, 86)
+
 
 
     quizzes[q1.quiz_id] = q1
@@ -985,13 +1027,16 @@ def __init__():
     quizzes[q6.quiz_id] = q6
     quizzes[q7.quiz_id] = q7
     quizzes[q8.quiz_id] = q8
-    quizzes[q9.quiz_id] = q9
+    
+    db.save_student_csv(students)
+    db.save_course_csv(courses)
+    db.save_enrolled_csv(enrolled)
+    db.save_quizzes_csv(quizzes)
     '''
-
-
     
     db.load_csv(students, courses, enrolled, quizzes, Student, Course, Enrollment, Quiz )
+    util.load_quiz_id(quizzes)
     main_menu()
 
 
-__init__()
+init()

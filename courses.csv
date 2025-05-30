@@ -1,12 +1,11 @@
 course_id,course_name,instructor
-CS101,Mathematics,Dr. Wakwak
-CS102,Science,Prof. Proton
-CS103,History,Dr. Time
-CS104,Art,Ms. Canvas
-GE45,Math101,Mr. Ben
-CS999,Networking,Dr. Jalai
-CS888,Art,Mr. Do
-dsfsdf,,as
-dfdsfss,,
-Cs343,History,Dr. Rizal
-Cs6555,Math,Virador
+GE Math,Mathematics,Dr. Wakwak
+GE SCI,Science,Prof. Proton
+GE HIS,History,Dr. Time
+GE ART,Art,Ms. Canvas
+GE PL,Philippine Literature,Dr. Mabini
+CS101,Programming Fundamentals,Engr. Lopez
+CS102,Web Development,Prof. Santiago
+CS103,Database Systems,Engr. Cruz
+CS104,Object Oriented Programming,Engr. Cruz
+CS555,GAMEDEV,JIREH
