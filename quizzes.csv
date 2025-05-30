@@ -1,9 +1,9 @@
 quiz_id,quiz_title,student_id,course_id,score
-34209,Quiz 1: Variables & Data Types,1111,CS101,89
-62254,Quiz 1: Variables & Data Types,2222,CS101,85
-50097,Quiz 1: Class and Objects,3333,CS104,91
-98742,Quiz 1: Attributes and Function,5555,CS104,84
-53371,Quiz 1: HTML & CSS,1111,CS102,88
-60342,Quiz 1: HTML & CSS,1111,CS102,90
-11651,Quiz 1: Relational Databases,4444,CS103,83
-20840,Quiz 1: Relational Databases,5555,CS103,86
+34209,Variables & Data Types,1111,CS101,89.0
+62254,Variables & Data Types,2222,CS101,85.0
+50097,Class and Objects,3333,CS104,91.0
+98742,Attributes and Function,5555,CS104,84.0
+53371,HTML & CSS,1111,CS102,88.0
+60342,HTML & CSS,1111,CS102,90.0
+11651,Relational Databases,4444,CS103,83.0
+20840,Relational Databases,5555,CS103,86.0

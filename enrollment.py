@@ -682,24 +682,28 @@ def manage_quizzes():
                     print("-" * 85)
                     print()
 
-                    print("Course ID  :")
-                    print("Quiz Title :")
-
-                    util.set_cursor_coordinate(14, 20)
-                    course_id = input()
+                                       
+                    course_id = input("Course ID  :")
 
                     if not course_id.strip():
                         break  
 
                     if course_id not in courses:
-                        util.set_cursor_coordinate(0, 23)
                         print("Course not found.")
-                        util.set_cursor_coordinate(0, 24)
                         input("Press Enter to continue...")
                         continue
                     
-                    util.set_cursor_coordinate(14, 21)
-                    quiz_title = input()
+                    found = False
+                    for student_id, enrollment in enrolled.items():
+                        if course_id in enrollment.course_ids:
+                            found = True
+                            break
+                    if not found:
+                        print("No students enrolled in this course.\n")
+                        input("\nPress Enter to continue...")
+                        continue
+                    
+                    quiz_title = input("Quiz Title :")
                     
                     if not quiz_title.strip():
                         break                  
@@ -768,10 +772,10 @@ def manage_quizzes():
                 if quizzes:
                     print("Quizzes")
                     print("=" * 85)
-                    print(f"{'Title':<15} {'ID':<10} {'Name:':<25} {'Course ID':<15} {'Score'}")
+                    print(f"{'Title':<30} {'ID':<10} {'Name:':<20} {'Course ID':<15} {'Score'}")
                     print("=" * 85)
                     for quiz_id, quiz in quizzes.items():
-                        print(f"{quiz.quiz_title:<15} {students[quiz.student_id].student_id:<10} {students[quiz.student_id].fname +" "+ students[quiz.student_id].lname:<25} {quiz.course_id:<15} {quiz.score}")
+                        print(f"{quiz.quiz_title:<30} {students[quiz.student_id].student_id:<10} {students[quiz.student_id].fname +" "+ students[quiz.student_id].lname:<20} {quiz.course_id:<15} {quiz.score}")
                 else:
                     print("No quizzes available.")
                 input("\nPress Enter to continue...")
