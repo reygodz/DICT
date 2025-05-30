@@ -7,3 +7,8 @@ quiz_id,quiz_title,student_id,course_id,score
 60342,HTML & CSS,1111,CS102,90.0
 11651,Relational Databases,4444,CS103,83.0
 20840,Relational Databases,5555,CS103,86.0
+11944,Abstract Variable,2222,CS101,89.0
+33953,Abstract Variable,6666,CS101,45.0
+61407,Basic JS,3333,CS102,95.0
+43928,Basic JS,1111,CS102,50.0
+20136,Basic JS,8888,CS102,45.0

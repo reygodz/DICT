@@ -719,14 +719,40 @@ def manage_quizzes():
                         print("=" * 85)
                         print()
 
+                        """print(f"Class List")
+                        print()
+                        print(f"{'ID':<10} {'Name':<25}")
+                        print("=" * 85)
+                        for student_id, enrollment in enrolled.items():
+                            if course_id in enrollment.course_ids:
+                                student = students[student_id]
+                                print(f"{student.student_id:<10} {student.fname + " "+ student.lname:<25}")
                         
-                        
+                        print()
                         print(f"{'ID:':<10} {'Name:':<25} {'Score'}")
                         print("=" * 85)
                         for quiz_id, quiz in quizzes.items():
                             if quiz.quiz_title == quiz_title and quiz.course_id == course_id:
-                                print(f"{quiz.student_id:<10} {students[quiz.student_id].name():<25} {quiz.score}")
+                                print(f"{quiz.student_id:<10} {students[quiz.student_id].name():<25} {quiz.score}")"""
                         
+                        print("Class List\n")
+                        print(f"{'ID':<10} {'Name':<25} {'Score'}")
+                        print("=" * 85)
+
+                        for student_id, enrollment in enrolled.items():
+                            if course_id in enrollment.course_ids:
+                                student = students[student_id]
+                                score_display = "N/A"
+
+                                # Check if the student has a quiz for the given title and course
+                                for quiz in quizzes.values():
+                                    if (quiz.student_id == student_id and
+                                        quiz.course_id == course_id and
+                                        quiz.quiz_title == quiz_title):
+                                        score_display = quiz.score
+                                        break
+
+                                print(f"{student.student_id:<10} {student.fname + ' ' + student.lname:<25} {score_display}")
                     
                         print()
 
@@ -772,10 +798,10 @@ def manage_quizzes():
                 if quizzes:
                     print("Quizzes")
                     print("=" * 85)
-                    print(f"{'Title':<30} {'ID':<10} {'Name:':<20} {'Course ID':<15} {'Score'}")
+                    print(f"{'Title':<35} {'ID':<10} {'Name:':<20} {'Course ID':<15} {'Score'}")
                     print("=" * 85)
                     for quiz_id, quiz in quizzes.items():
-                        print(f"{quiz.quiz_title:<30} {students[quiz.student_id].student_id:<10} {students[quiz.student_id].fname +" "+ students[quiz.student_id].lname:<20} {quiz.course_id:<15} {quiz.score}")
+                        print(f"{quiz.quiz_title:<35} {students[quiz.student_id].student_id:<10} {students[quiz.student_id].fname +" "+ students[quiz.student_id].lname:<20} {quiz.course_id:<15} {quiz.score}")
                 else:
                     print("No quizzes available.")
                 input("\nPress Enter to continue...")
